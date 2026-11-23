@@ -63,7 +63,7 @@ function setupHome(){
     const $form = document.querySelector("#characterForm")
     const $input = document.querySelector("#characterInput");
 
-    $form.addEventListenner("submit",(event) => {
+    $form.addEventListener("submit",(event) => {
         event.preventDefault();
         const name = $input.value.trim();
 
@@ -79,29 +79,11 @@ function setupHome(){
     });
 }
 
-async function loadCharacter(name) {
-setState ({ status: "loading", errorMessage: null});
-
-try { 
-const raw = await getFirstCharacterByName(name);
-
-const profile = toCharacterProfile(raw);
-
-setState ({ status: "success", profile});
-const $container = document.querySelector ("#characterContainer");
-renderCharacterCard($container, profile);
-} catch (err) {
-    setState ({
-        status: "error",
-        errorMessage: getUserMessage(err),        
-    });
-}
-
-async function loadCharacter( ){
+async function loadCharacter(name){
     setState({ status: "loading", errorMessage: null })
 
     try {
-    const raw = getFirstCharacterByName (name);
+    const raw = await getFirstCharacterByName(name);
 
     const profile = toCharacterProfile(raw);
 
@@ -110,9 +92,8 @@ async function loadCharacter( ){
     renderCharacterCard($container, profile);
     } catch (err){
         setState({
-            status: "eroor",
+            status: "error",
             errorMessage: getUserMessage(err),
         });
     }
-}
 }
