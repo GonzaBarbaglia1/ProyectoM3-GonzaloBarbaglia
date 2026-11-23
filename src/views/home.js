@@ -1,6 +1,7 @@
 import { getFirstCharacterByName } from "../services/rmApi.js";
 import { toCharacterProfile } from "../transform/character.js";
 import { renderCharacterCard } from "../ui/characterCard.js";
+import { getUserMessage } from "../ui/messages.js";
 
 const state = {
     status: "idle",
@@ -11,7 +12,7 @@ const state = {
 
 function setState(updates){
   Object.assign(state, updates);
-  renderHome;
+  renderHome();
 }
 
 
@@ -62,7 +63,7 @@ function setupHome(){
     const $form = document.querySelector("#characterForm")
     const $input = document.querySelector("#characterInput");
 
-    $form.addeventListenner("submit",(event) => {
+    $form.addEventListenner("submit",(event) => {
         event.preventDefault();
         const name = $input.value.trim();
 
@@ -82,7 +83,7 @@ async function loadCharacter(name) {
 setState ({ status: "loading", errorMessage: null});
 
 try { 
-const raw = getFirstCharacterByName(name);
+const raw = await getFirstCharacterByName(name);
 
 const profile = toCharacterProfile(raw);
 
@@ -94,5 +95,24 @@ renderCharacterCard($container, profile);
         status: "error",
         errorMessage: getUserMessage(err),        
     });
+}
+
+async function loadCharacter( ){
+    setState({ status: "loading", errorMessage: null })
+
+    try {
+    const raw = getFirstCharacterByName (name);
+
+    const profile = toCharacterProfile(raw);
+
+    setState({ status: "success", profile });
+    const $container = document.querySelector("#characterContainer")
+    renderCharacterCard($container, profile);
+    } catch (err){
+        setState({
+            status: "eroor",
+            errorMessage: getUserMessage(err),
+        });
+    }
 }
 }

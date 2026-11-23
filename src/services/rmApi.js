@@ -1,4 +1,4 @@
-import { fetchJson } from "./fetchJson";    
+import { fetchJson } from "./fetchJson.js";    
 
 function buildCharacterSearchUrl({name, page = 1}) {
     const baseUrl = `https://rickandmortyapi.com/api/character`;
@@ -8,7 +8,7 @@ function buildCharacterSearchUrl({name, page = 1}) {
     });
     return `${baseUrl}?${params.toString()}`;
 }
- export async function getFistCharacterByName(name) {
+ export async function getFirstCharacterByName(name) {
     const url = buildCharacterSearchUrl({ name })
     const data = await fetchJson(url)
     const first = data.results?.[0]
