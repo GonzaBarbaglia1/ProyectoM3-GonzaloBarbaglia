@@ -237,3 +237,12 @@ Estilos para ABOUT / NOTFOUND / HOME.JS
 .btn--primary:hover {
   background-color: #000308;
 }
+
+/*===================================================================
+Estilos para tarjeta de personaje nuevo
+======================================================================*/
+
+.characterCard {
+  display: flex;
+  flex-direction: column;
+} 
