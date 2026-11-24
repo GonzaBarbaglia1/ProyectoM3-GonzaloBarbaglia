@@ -1,10 +1,12 @@
 import { getCharacterReply } from "../services/aiClient.js";
+import { wait } from "../services/debounce.js";
+import { getUserMessage } from "../ui/messages.js";
 
 const state = {
-messages: [
-    {role: "character", text: "Hola, soy tu personaje favorito, ¿sobre que quieres hablar hoy?."}],
+messages: [{role: "character", text: "Hola, soy tu personaje favorito, ¿sobre que quieres hablar hoy?."}],
 status: "idle", // ´loading´ || ´error´
 error: null,
+retryCountdown: null,
 lastUserMessage: null,
 }
 
@@ -54,6 +56,12 @@ function renderMessages(messages = state.messages) {
 }
 
 function renderStatus(status = state.status, error = state.error) {
+    if (state.status === "loading" && state.retryCountdown != null){
+        return `
+        <div class ="message message--character message--typing">
+        Esperando para reintentar (${state.retryCountdown} segundos) ...
+        </div>"`;
+    }
     if (status === 'loading') {
         return `<div class="message message--character message--typing">Escribiendo...</div>`;
     }
@@ -111,11 +119,36 @@ function setupChat() {
                 messages: [...state.messages, {role: "character", text: reply}],
                 status: "idle",
                 error: null,
+                lastUserMessage: null,
             });
         } catch (error) {
+            if (error.status === 429){
+                const seconds = err.retryAfterSeconds ?? 5;
+                for(let s = seconds; s > 0; s--){
+                    setState ({ status: "loading", retryCountdown: s});
+                    await wait (1000)    
+                }
+                try {
+                    setState ({ status: "loading", retryCountdown: null });
+                    const reply = await getCharacterReply(nextMessages);
+                    setState({
+                        messages:[...state.messages, {role: "character", text:reply }],
+                        status: "idle",
+                        error: null,
+                        lastUserMessage: null,
+                    });
+                    return;
+                } catch (errRetry) {
+                    setState({ 
+                        status: "error",
+                        error: getUserMessage(errRetry),
+                    });
+                return;
+                }
+            }
             setState({
                 status: "error",
-                error: "En este momento no puedo responder. Reintentalo.",
+                error: getUserMessage(err),
             });
         }
     }

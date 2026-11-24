@@ -1,3 +1,7 @@
+node_modules/
 .env
-/nodemodules
-package.json
+.env.*
+!.env.example
+.vercel/
+dist/
+coverage/

@@ -18,7 +18,7 @@ export async function getCharacterReply(uiMessages){
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
     });
- } catch (error) {
+ } catch (err) {
         if (err.status === 429 && err.body?.retryAfterSeconds){
             err.retryAfterSeconds = err.body.retryAfterSeconds
         }
