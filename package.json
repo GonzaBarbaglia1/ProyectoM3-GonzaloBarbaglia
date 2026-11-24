@@ -1,0 +1,24 @@
+{
+  "name": "proyectom3-gonzalobarbaglia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GonzaBarbaglia1/ProyectoM3-GonzaloBarbaglia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GonzaBarbaglia1/ProyectoM3-GonzaloBarbaglia/issues"
+  },
+  "homepage": "https://github.com/GonzaBarbaglia1/ProyectoM3-GonzaloBarbaglia#readme",
+  "devDependencies": {
+    "@google/generative-ai": "^0.24.1"
+  }
+}

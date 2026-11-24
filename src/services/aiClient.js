@@ -1,6 +1,8 @@
 import { buildPayload, getTrimmedHistory, normalizeAIResponse } from "../transform/chatPayload.js";
 import { PEPEARGENTO_SYSTEM_PROMPT } from "./prompts.js";
-import {send as sendToMock} from "./mockGeminiApi.js";
+import { fetchJson } from "./fetchJson.js";
+
+const CHAT_ENDPOINT = "/api/chat";
 
 export async function getCharacterReply(uiMessages){
     const trimmed = getTrimmedHistory(uiMessages);
@@ -9,7 +11,19 @@ export async function getCharacterReply(uiMessages){
         systemPrompt: PEPEARGENTO_SYSTEM_PROMPT,
         uiMessages: trimmed,
     });
-    const rawResponse = await sendToMock(payload);
+    let rawResponse;
+    try {
+        rawResponse = await fetchJson (CHAT_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+    });
+ } catch (error) {
+        if (err.status === 429 && err.body?.retryAfterSeconds){
+            err.retryAfterSeconds = err.body.retryAfterSeconds
+        }
+        throw error;
+    }
 
     const text = normalizeAIResponse(rawResponse);
 

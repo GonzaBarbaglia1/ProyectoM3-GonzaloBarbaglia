@@ -39,7 +39,7 @@ export function renderHome() {
         </form>
     <div id="characterContainer">${renderContainer()}</div>
       <p style="text-aling:center; margin-top: 2rem;">
-       <a class="btn btn--primary" href"/chat"> Empezar a chatear </a> 
+       <a class="btn btn--primary" href="/chat"> Empezar a chatear </a> 
        </p>
     </section>
     `;
