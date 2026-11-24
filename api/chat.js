@@ -1,4 +1,9 @@
-export default function handler(req, res) {
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const MODEL_NAME = "gemini-flash-lite-latest";
+const RETRY_AFTER_FALLBACK_SECONDS = 10;
+
+export default async function handler(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({
             error: "Method not allowed"
@@ -13,27 +18,25 @@ export default function handler(req, res) {
                 error: "contents required and must be non-empty"
             });
         }
+    console.log("API Key cargada:", Boolean(process.env.GEMINI_API_KEY));
 
-        const replyText = "Hola, te estoy respondiendo desde el backend.";
-        const inputTokens = 10;
-        const outputTokens = Math.ceil(replyText.length / 4);
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({
+        model: MODEL_NAME,
+        systemInstruction,
+        generationConfig,
+    });
 
-        return res.status(200).json({
-            candidates: [{
-                content: {
-                    parts: [{ text: replyText }],
-                    role: "model",
-                },
-                finishReason: "STOP",
-            }],
-            usageMetadata: {
-                promptTokenCount: inputTokens,
-                candidatesTokenCount: outputTokens,
-                totalTokenCount: inputTokens + outputTokens
-            },
-        });
+    const result = await model.generateContent({ contents });
 
+    return res.status(200).json(result.response);
     } catch (error) {
+        if (error.status ===429){
+            return res.status(429).json({
+                error: "Rate limir exceded",
+                retreyAfterSeconds: RETRY_AFTER_FALLBACK_SECONDS,
+            });
+        }
         console.error("Error en /api/chat:", error);
 
         return res.status(500).json({
