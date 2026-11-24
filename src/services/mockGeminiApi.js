@@ -1,4 +1,4 @@
-import { PEPEARGENTO_SYSTEM_PROMPT } from "./prompts";
+import { PEPEARGENTO_SYSTEM_PROMPT } from "./prompts.js";
 
 const CANNED_REPLIES =[
     "Uyyyy que boludo",
@@ -21,16 +21,16 @@ function buildOkResponse(replyText, inputTokens){
             },
             finishReason: "STOP",
         }],
-        usageMetada: {
+        usageMetadata: {
             promptTokencount: inputTokens,
-            candidatesTokenCount: outputTokens,
+            candidatesTokencount: outputTokens,
             totalTokenCount: inputTokens + outputTokens
         },
     };
 }
 
 function estimateInputTokens(payload){
-    const systemText = payload.systeminstruction?.parts?.[0]?.text ?? "";
+    const systemText = payload.systemInstruction?.parts?.[0]?.text ?? "";
     const messagesText = (payload.contents ?? [])
     .flatMap ((c) => c.parts ?? [])
     .map((p) => p.text ?? "").join(" ");
