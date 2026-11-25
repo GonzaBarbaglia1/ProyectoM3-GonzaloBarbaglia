@@ -1,21 +1,41 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-AR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="src/styles.css" />
+
+    <meta name="description" content="Conversá con tus personajes ficticios favoritos mediante inteligencia artificial.">
+
+    <title>Character Chat AI</title>
+
+    <link rel="stylesheet" href="/src/styles.css" />
 </head>
-  <body>
-    <nav class="mainNav">
-        <a class="mainNav__link" href="/">Home</a>
-        <a class="mainNav__link" href="/chat">Chat</a>
-        <a class="mainNav__link" href="/about">About</a>
-    </nav>
 
-<div id="app"></div>
+<body>
 
-<script type="module" src="src/main.js"></script>
+    <header class="mainHeader">
 
-  </body>
+        <a class="mainHeader__brand" href="/">
+            Character<span>AI</span>
+        </a>
+
+        <nav class="mainNav" aria-label="Navegación principal">
+            <a class="mainNav__link" href="/">Home</a>
+            <a class="mainNav__link" href="/chat">Chat</a>
+            <a class="mainNav__link" href="/about">About</a>
+        </nav>
+
+    </header>
+
+    <main id="app"></main>
+
+    <footer class="mainFooter">
+        <p>Character Chat AI | Proyecto Integrador M3</p>
+        <p>Powered by Google Gemini</p>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+
+</body>
 </html>

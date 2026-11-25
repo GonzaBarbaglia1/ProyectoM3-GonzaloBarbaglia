@@ -3,12 +3,15 @@ import { wait } from "../services/debounce.js";
 import { getUserMessage } from "../ui/messages.js";
 
 const state = {
-messages: [{role: "character", text: "Hola, soy tu personaje favorito, ¿sobre que quieres hablar hoy?."}],
-status: "idle", // ´loading´ || ´error´
-error: null,
-retryCountdown: null,
-lastUserMessage: null,
-}
+    messages: [{
+        role: "character",
+        text: "Buen día, hermosa mañana, ¿verdad? Bueno, decime... ¿qué necesitás?"
+    }],
+    status: "idle",
+    error: null,
+    retryCountdown: null,
+    lastUserMessage: null,
+};
 
 function setState(updates) {
     Object.assign(state, updates);
@@ -20,14 +23,40 @@ export function renderChat() {
     app.innerHTML = `
     <div class="chatApp">
      <header class="chatHeader">
-        <h1 class="chatHeader__title">Chat</h1>
-        <p class="chatHeader__subtitle">Con tu personaje favorito</p>
-        </header>
 
-     <main class="chatMessages" id="chatMessages" aria-live="polite">
-     ${renderMessages(state.messages)}
-     ${renderStatus(state.status, state.error)}
-     </main>
+    <img
+        class="chatHeader__avatar"
+        src="/assets/images/pepe-argento.jpg"
+        alt="Pepe Argento"
+    />
+
+    <div class="chatHeader__info">
+
+        <h1 class="chatHeader__title">
+            Pepe Argento
+        </h1>
+
+        <p class="chatHeader__subtitle">
+            Casados con hijos
+        </p>
+
+        <span class="chatHeader__status">
+            Disponible para conversar
+        </span>
+
+    </div>
+
+</header>
+
+     <section
+    class="chatMessages"
+    id="chatMessages"
+    aria-label="Conversación"
+    aria-live="polite"
+>
+    ${renderMessages(state.messages)}
+    ${renderStatus(state.status, state.error)}
+</section>
 
     <form class="chatComposer" id="chatComposer" aria-label="Formulario de chat">
         <input 
@@ -60,12 +89,15 @@ function renderStatus(status = state.status, error = state.error) {
         return `
         <div class ="message message--character message--typing">
         Esperando para reintentar (${state.retryCountdown} segundos) ...
-        </div>"`;
+        </div>`;
     }
-    if (status === 'loading') {
-        return `<div class="message message--character message--typing">Escribiendo...</div>`;
-    }
-
+    if (status === "loading") {
+    return `
+        <div class="message message--character message--typing">
+            Pepe está escribiendo...
+        </div>
+    `;
+}
     if (status === 'error') {
         return `<div class="message message--error">Error: ${escapeHtml(error)}
         <button id="retryBtn" type="button">
@@ -123,7 +155,7 @@ function setupChat() {
             });
         } catch (error) {
             if (error.status === 429){
-                const seconds = err.retryAfterSeconds ?? 5;
+                const seconds = error.retryAfterSeconds ?? 5;
                 for(let s = seconds; s > 0; s--){
                     setState ({ status: "loading", retryCountdown: s});
                     await wait (1000)    
@@ -148,7 +180,7 @@ function setupChat() {
             }
             setState({
                 status: "error",
-                error: getUserMessage(err),
+                error: getUserMessage(error),
             });
         }
     }
