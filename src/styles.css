@@ -263,6 +263,9 @@ Estilos para tablet
   .characterGallery__grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+.aboutTech {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
 }
 
 /* =========================================================================
@@ -314,6 +317,32 @@ Estilos para ABOUT / NOTFOUND / HOME.JS
   margin-bottom: 1rem;
 }
 
+.view--about {
+  text-align: left;
+  padding: 2rem 1rem;
+}
+
+.view--about h2 {
+  color: var(--color-wood);
+  font-size: 1.25rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.aboutTech {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  list-style: none;
+}
+
+.aboutTech li {
+  background-color: var(--color-beige);
+  color: var(--color-dark);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
 .btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
@@ -327,15 +356,14 @@ Estilos para ABOUT / NOTFOUND / HOME.JS
 }
 
 .btn--primary {
-  background-color: #00040a;
-  color: #d3d6dd;
+  background-color: var(--color-primary);
+  color: var(--color-cream);
   border: 0;
 }
 
 .btn--primary:hover {
-  background-color: #000308;
+  background-color: var(--color-wood);
 }
-
 /*===================================================================
 Estilos para tarjeta de personaje nuevo
 ======================================================================*/
