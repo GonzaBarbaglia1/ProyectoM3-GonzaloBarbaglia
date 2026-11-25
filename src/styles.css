@@ -524,4 +524,8 @@ Estilos para desktop
   grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+/* Ajuste de encuadre de Paola */
+.characterCard__image[src*="paola-argento"] {
+  object-position: center top;
+}
 
