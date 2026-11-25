@@ -1,4 +1,4 @@
-
+import { characters } from "../services/characters.js";
 export function renderHome() {
     const app = document.querySelector("#app");
 
@@ -26,36 +26,34 @@ export function renderHome() {
 
                 <div class="characterGallery__grid">
 
-                    <article class="characterCard">
+            ${characters.map(character => `
+                <article class="characterCard">
 
-                        <img
-                            class="characterCard__image"
-                            src="/assets/images/pepe-argento.jpg"
-                            alt="Pepe Argento"
-                        />
+                    <img
+                        class="characterCard__image"
+                        src="${character.image}"
+                        alt="${character.name}"
+                    />
 
-                        <div class="characterCard__content">
+                    <div class="characterCard__content">
 
-                            <span class="characterCard__category">
-                                Casados con hijos
-                            </span>
+                        <span class="characterCard__category">
+                            ${character.category}
+                        </span>
 
-                            <h3>Pepe Argento</h3>
+                        <h3>${character.name}</h3>
 
-                            <p>
-                                Zapatero, padre de familia, fanático
-                                de Racing y especialista en sobrevivir
-                                a las ocurrencias de Moni.
-                                Sarcasmo y humor argentino garantizados.
-                            </p>
+                        <p>${character.description}</p>
 
-                            <a class="btn btn--primary" href="/chat">
-                                Empezar a chatear
-                            </a>
+                        <a class="btn btn--primary"
+                        href="/chat?character=${character.id}">
+                            Empezar a chatear
+                        </a>
 
-                        </div>
+                    </div>
 
-                    </article>
+                </article>
+            `).join("")}
 
                 </div>
 
