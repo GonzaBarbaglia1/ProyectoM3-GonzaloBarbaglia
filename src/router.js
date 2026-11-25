@@ -5,6 +5,7 @@ import {renderChat} from './views/chat.js';
 
 const routes = {
     "/": renderHome,
+    "/home": renderHome,
     "/about": renderAbout,
     "/chat": renderChat,
     "/not-found": renderNotFound,
