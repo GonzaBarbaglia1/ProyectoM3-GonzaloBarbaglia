@@ -27,11 +27,6 @@ export async function getCharacterReply(uiMessages, systemPrompt = PEPEARGENTO_S
 
     const text = normalizeAIResponse(rawResponse);
 
-    const usage = rawResponse?.usageMetadata;
-
-  if (usage){
-   console.log(`[Tokens] input: ${usage.promptTokenCount}, output: ${usage.candidatesTokenCount}`);
-}
 return text;
 }
 

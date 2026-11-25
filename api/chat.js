@@ -17,7 +17,6 @@ export default async function handler(req, res) {
                 error: "contents required and must be non-empty"
             });
         }
-    console.log("API Key cargada:", Boolean(process.env.GEMINI_API_KEY));
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({
