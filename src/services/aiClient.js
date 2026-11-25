@@ -4,11 +4,11 @@ import { fetchJson } from "./fetchJson.js";
 
 const CHAT_ENDPOINT = "/api/chat";
 
-export async function getCharacterReply(uiMessages){
+export async function getCharacterReply(uiMessages, systemPrompt = PEPEARGENTO_SYSTEM_PROMPT){
     const trimmed = getTrimmedHistory(uiMessages);
 
     const payload = buildPayload({
-        systemPrompt: PEPEARGENTO_SYSTEM_PROMPT,
+        systemPrompt: systemPrompt,
         uiMessages: trimmed,
     });
     let rawResponse;
