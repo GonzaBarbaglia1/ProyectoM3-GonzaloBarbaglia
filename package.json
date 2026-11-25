@@ -1,8 +1,7 @@
 {
   "name": "proyectom3-gonzalobarbaglia",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Aplicacion web de chat con personajes ficticios mediante inteligencia artificial",
   "scripts": {
     "test": "vitest"
   },
@@ -11,14 +10,17 @@
     "url": "git+https://github.com/GonzaBarbaglia1/ProyectoM3-GonzaloBarbaglia.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Gonzalo Barbaglia",
   "license": "ISC",
   "type": "module",
   "bugs": {
     "url": "https://github.com/GonzaBarbaglia1/ProyectoM3-GonzaloBarbaglia/issues"
   },
   "homepage": "https://github.com/GonzaBarbaglia1/ProyectoM3-GonzaloBarbaglia#readme",
-  "devDependencies": {
+  "dependencies": {
     "@google/generative-ai": "^0.24.1"
+  },
+  "devDependencies": {
+    "vitest": "^5.1.1"
   }
 }
