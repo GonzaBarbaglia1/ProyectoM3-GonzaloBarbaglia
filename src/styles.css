@@ -110,6 +110,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 75vh;
+  height: 75dvh;
   min-height: 350px;
   background-color: rgba(245, 239, 230, 0.88);
 }
@@ -142,6 +143,7 @@ body {
 
 .chatMessages {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 1rem;
   display: flex;
@@ -149,7 +151,6 @@ body {
   gap: 0.75rem;
   overscroll-behavior: contain;
 }
-
 .chatComposer {
   display: flex;
   flex-shrink: 0;
@@ -180,6 +181,31 @@ Estilos para los mensajes
   align-self: flex-start;
   background-color: var(--color-beige);
   color: var(--color-dark);
+}
+.message--typing {
+  font-size: 0.875rem;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.message--error {
+  align-self: center;
+  background-color: #FCE4DF;
+  color: #842D24;
+  border: 1px solid var(--color-primary);
+  font-size: 0.875rem;
+}
+
+.message--error button {
+  display: block;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: var(--color-cream);
+  border: 0;
+  border-radius: 0.5rem;
+  font: inherit;
+  cursor: pointer;
 }
 
 .chatComposer__input {
@@ -223,79 +249,6 @@ Estilos para los mensajes
   cursor: not-allowed;
 }
 
-/* =========================================================================
-Estilos para tablet
-=========================================================================*/
-
-@media (min-width: 768px) {
-  .mainHeader {
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-}
-  .chatHeader {
-    padding: 1.25rem 1.5rem;
-  }
-  
-  .chatMessages {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  overscroll-behavior: contain;
-}
-
-  .message {
-    max-width: 75%;
-  }
-
-  .chatComposer {
-  display: flex;
-  flex-shrink: 0;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-top: 1px solid #e5e7eb;
-  background-color: #f0f3f8;
-}
-  .characterGallery__grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.aboutTech {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-}
-
-/* =========================================================================
-Estilos para desktop  
-=========================================================================*/
-
-@media (min-width: 1024px) {
-  .chatApp {
-    max-width: 50rem;
-    margin: 2rem auto;
-    border-radius: 1rem;
-    border-left: 1px solid var(--color-beige);
-    border-right: 1px solid var(--color-beige);
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .message {
-    max-width: 60%;
-  }
-
-  .chatComposer {
-    padding: 1.5rem 2rem;
-  }
-  
-  .characterGallery__grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
 /* ==========================================================================
 Estilos para ABOUT / NOTFOUND / HOME.JS
 =========================================================================*/
@@ -315,6 +268,39 @@ Estilos para ABOUT / NOTFOUND / HOME.JS
 .view p {
   color: #6b7280;
   margin-bottom: 1rem;
+}
+/* Estilos de Home - Mobile First */
+
+.view--home {
+  max-width: 80rem;
+  padding: 2rem 1rem;
+}
+
+.homeHero {
+  max-width: 45rem;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.homeHero h1 {
+  font-size: 2rem;
+  color: var(--color-dark);
+}
+
+.homeHero__tag {
+  display: inline-block;
+  background-color: var(--color-beige);
+  color: var(--color-dark);
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.characterGallery__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
 
 .view--about {
@@ -485,3 +471,66 @@ cursor: not-allowed;
     border-radius: 50%;
     flex-shrink: 0;
 }
+/* =========================================================================
+Estilos para tablet
+=========================================================================*/
+
+@media (min-width: 768px) {
+  .mainHeader {
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+  .chatHeader {
+    padding: 1.25rem 1.5rem;
+  }
+  
+  .chatMessages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overscroll-behavior: contain;
+}
+  .message {
+    max-width: 75%;
+  }
+
+  .characterGallery__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.aboutTech {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+}
+/* =========================================================================
+Estilos para desktop  
+=========================================================================*/
+
+@media (min-width: 1024px) {
+  .chatApp {
+    max-width: 50rem;
+    margin: 2rem auto;
+    border-radius: 1rem;
+    border-left: 1px solid var(--color-beige);
+    border-right: 1px solid var(--color-beige);
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .message {
+    max-width: 60%;
+  }
+
+  .chatComposer {
+    padding: 1.5rem 2rem;
+  }
+  
+  .characterGallery__grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
