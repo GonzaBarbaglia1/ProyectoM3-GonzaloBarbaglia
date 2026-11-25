@@ -6,10 +6,3 @@ setupLinkInterceptor();
 window.addEventListener("popstate", router);
 
 router();
-
-
-// const state = {
-     // status: "idle",
-     //data: null,
-     //error: null,   
-//}
