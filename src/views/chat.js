@@ -1,24 +1,49 @@
 import { getCharacterReply } from "../services/aiClient.js";
 import { wait } from "../services/debounce.js";
 import { getUserMessage } from "../ui/messages.js";
+import { characters } from "../services/characters.js";
 
-const state = {
-    messages: [{
-        role: "character",
-        text: "Buen día, hermosa mañana, ¿verdad? Bueno, decime... ¿qué necesitás?"
-    }],
-    status: "idle",
-    error: null,
-    retryCountdown: null,
-    lastUserMessage: null,
-};
+const chatStates = {};
 
-function setState(updates) {
-    Object.assign(state, updates);
-    renderChat();
+function getSelectedCharacter() {
+    const params = new URLSearchParams(window.location.search);
+    const characterId = params.get("character");
+
+    return characters.find(character => character.id === characterId)
+        ?? characters[0];
 }
 
+function getChatState(character) {
+    if (!chatStates[character.id]) {
+        chatStates[character.id] = {
+            messages: [{
+                role: "character",
+                text: character.greeting
+            }],
+            status: "idle",
+            error: null,
+            retryCountdown: null,
+            lastUserMessage: null,
+        };
+    }
+
+    return chatStates[character.id];
+};
+
+function setState(character, updates) {
+    const state = getChatState(character);
+    Object.assign(state, updates);
+
+    if (
+        window.location.pathname === "/chat" &&
+        getSelectedCharacter().id === character.id
+    ) {
+        renderChat();
+    }
+}
 export function renderChat() {
+    const character = getSelectedCharacter();
+    const state = getChatState(character);
     const app = document.querySelector('#app');
     app.innerHTML = `
     <div class="chatApp">
@@ -26,18 +51,18 @@ export function renderChat() {
 
     <img
         class="chatHeader__avatar"
-        src="/assets/images/pepe-argento.jpg"
-        alt="Pepe Argento"
+       	src="${character.image}"
+        	alt="${character.name}"
     />
 
     <div class="chatHeader__info">
 
         <h1 class="chatHeader__title">
-            Pepe Argento
+           	${character.name}
         </h1>
 
         <p class="chatHeader__subtitle">
-            Casados con hijos
+          	${character.category}
         </p>
 
         <span class="chatHeader__status">
@@ -55,7 +80,7 @@ export function renderChat() {
     aria-live="polite"
 >
     ${renderMessages(state.messages)}
-    ${renderStatus(state.status, state.error)}
+    ${renderStatus(state, character)}
 </section>
 
     <form class="chatComposer" id="chatComposer" aria-label="Formulario de chat">
@@ -71,11 +96,11 @@ export function renderChat() {
     </div>
     `;
 
-    setupChat();
+    setupChat(character, state);
     scrollToBottom();
 }   
 
-function renderMessages(messages = state.messages) {
+function renderMessages(messages) {
     return messages
     .map(
         (msg) => `
@@ -84,7 +109,8 @@ function renderMessages(messages = state.messages) {
     .join('');
 }
 
-function renderStatus(status = state.status, error = state.error) {
+function renderStatus(state, character) {
+    const { status, error } = state;
     if (state.status === "loading" && state.retryCountdown != null){
         return `
         <div class ="message message--character message--typing">
@@ -94,7 +120,7 @@ function renderStatus(status = state.status, error = state.error) {
     if (status === "loading") {
     return `
         <div class="message message--character message--typing">
-            Pepe está escribiendo...
+            ${character.name} está escribiendo...
         </div>
     `;
 }
@@ -114,7 +140,7 @@ function escapeHtml(str = '') {
     return div.innerHTML;
 }
 
-function setupChat() {
+function setupChat(character, state) {
     const chatForm = document.querySelector('#chatComposer');
     const chatInput = document.querySelector('#chatInput');
     const chatRetry = document.querySelector('#retryBtn');
@@ -138,7 +164,7 @@ function setupChat() {
     async function sendMessage(text, isRetry = false) {
         const nextMessages = isRetry ? state.messages : [...state.messages, {role: "user", text }];
         
-     setState ({
+     setState(character, {
         messages: nextMessages,
         status: "loading",
         error: null,
@@ -146,8 +172,9 @@ function setupChat() {
      });
 
         try {
-            const reply = await getCharacterReply(nextMessages);
-            setState ({
+            const reply = await getCharacterReply(nextMessages, character.systemPrompt);
+
+         setState(character, {
                 messages: [...state.messages, {role: "character", text: reply}],
                 status: "idle",
                 error: null,
@@ -157,13 +184,13 @@ function setupChat() {
             if (error.status === 429){
                 const seconds = error.retryAfterSeconds ?? 5;
                 for(let s = seconds; s > 0; s--){
-                    setState ({ status: "loading", retryCountdown: s});
+                    setState(character, { status: "loading", retryCountdown: s});
                     await wait (1000)    
                 }
                 try {
-                    setState ({ status: "loading", retryCountdown: null });
-                    const reply = await getCharacterReply(nextMessages);
-                    setState({
+                    setState(character, { status: "loading", retryCountdown: null });
+                    const reply = await getCharacterReply(nextMessages, character.systemPrompt);
+                    setState(character, {
                         messages:[...state.messages, {role: "character", text:reply }],
                         status: "idle",
                         error: null,
@@ -171,14 +198,14 @@ function setupChat() {
                     });
                     return;
                 } catch (errRetry) {
-                    setState({ 
+                    setState(character, { 
                         status: "error",
                         error: getUserMessage(errRetry),
                     });
                 return;
                 }
             }
-            setState({
+           setState(character, {
                 status: "error",
                 error: getUserMessage(error),
             });
