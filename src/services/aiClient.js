@@ -22,7 +22,7 @@ export async function getCharacterReply(uiMessages){
         if (err.status === 429 && err.body?.retryAfterSeconds){
             err.retryAfterSeconds = err.body.retryAfterSeconds
         }
-        throw error;
+        throw err;
     }
 
     const text = normalizeAIResponse(rawResponse);
