@@ -139,10 +139,6 @@ Se priorizó la experiencia desde dispositivos móviles utilizando Flexbox, CSS 
 
 La identidad visual está inspirada en la ambientación de la casa de la familia Argento.
 
-### Capturas de pantalla
-
-Pendientes de incorporar en la carpeta `capturas/`.
-
 ## 8. Testing
 
 Las pruebas automatizadas se realizan mediante Vitest.
